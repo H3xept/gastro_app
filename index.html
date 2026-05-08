@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#5a8a6a" />
+  <meta name="description" content="Track food, bloating, bowel movements, and sleep for your gastroenterologist." />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Gastro" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg" />
+  <link rel="apple-touch-icon" href="icons/icon.svg" />
+  <link rel="stylesheet" href="styles.css" />
+  <title>Gastro Tracker</title>
+</head>
+<body>
+  <header class="app-header">
+    <h1 id="view-title">Log</h1>
+    <button id="settings-btn" class="icon-btn" aria-label="Settings">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+  </header>
+
+  <main id="app">
+    <!-- LOG VIEW -->
+    <section id="view-log" class="view active">
+      <p class="hint">Tap to log a new entry. Time defaults to now — you can change it.</p>
+      <div class="quick-grid">
+        <button class="quick-btn food" data-type="food">
+          <span class="emoji" aria-hidden="true">🍽️</span>
+          <span>Food</span>
+        </button>
+        <button class="quick-btn bloating" data-type="bloating">
+          <span class="emoji" aria-hidden="true">🎈</span>
+          <span>Bloating</span>
+        </button>
+        <button class="quick-btn bowel" data-type="bowel">
+          <span class="emoji" aria-hidden="true">🚽</span>
+          <span>Bowel</span>
+        </button>
+        <button class="quick-btn sleep" data-type="sleep">
+          <span class="emoji" aria-hidden="true">🌙</span>
+          <span>Sleep</span>
+        </button>
+      </div>
+
+      <h2 class="section-title">Today</h2>
+      <ul id="today-list" class="entry-list"></ul>
+    </section>
+
+    <!-- HISTORY VIEW -->
+    <section id="view-history" class="view">
+      <div class="filters">
+        <label>
+          From
+          <input type="date" id="filter-from" />
+        </label>
+        <label>
+          To
+          <input type="date" id="filter-to" />
+        </label>
+        <label>
+          Type
+          <select id="filter-type">
+            <option value="">All</option>
+            <option value="food">Food</option>
+            <option value="bloating">Bloating</option>
+            <option value="bowel">Bowel</option>
+            <option value="sleep">Sleep</option>
+          </select>
+        </label>
+      </div>
+      <ul id="history-list" class="entry-list"></ul>
+    </section>
+
+    <!-- EXPORT VIEW -->
+    <section id="view-export" class="view">
+      <p class="hint">Export your data to share with your doctor. CSV opens in Excel/Sheets; JSON keeps every detail.</p>
+      <div class="export-summary" id="export-summary">Loading…</div>
+      <div class="export-range">
+        <label>
+          From
+          <input type="date" id="export-from" />
+        </label>
+        <label>
+          To
+          <input type="date" id="export-to" />
+        </label>
+      </div>
+      <div class="export-buttons">
+        <button id="export-csv" class="primary-btn">Download CSV</button>
+        <button id="export-json" class="secondary-btn">Download JSON</button>
+        <button id="export-print" class="secondary-btn">Print / Save as PDF</button>
+      </div>
+    </section>
+  </main>
+
+  <nav class="tab-bar">
+    <button class="tab-btn active" data-view="log">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <span>Log</span>
+    </button>
+    <button class="tab-btn" data-view="history">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span>History</span>
+    </button>
+    <button class="tab-btn" data-view="export">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      <span>Export</span>
+    </button>
+  </nav>
+
+  <!-- ENTRY MODAL -->
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <header class="modal-header">
+        <h2 id="modal-title">Entry</h2>
+        <button id="modal-close" class="icon-btn" aria-label="Close">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </header>
+      <form id="entry-form" class="entry-form" novalidate></form>
+      <footer class="modal-footer">
+        <button id="entry-delete" class="danger-btn" type="button" hidden>Delete</button>
+        <div class="spacer"></div>
+        <button id="entry-cancel" class="secondary-btn" type="button">Cancel</button>
+        <button id="entry-save" class="primary-btn" type="button">Save</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- SETTINGS MODAL -->
+  <div id="settings-modal" class="modal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+      <header class="modal-header">
+        <h2 id="settings-title">Settings</h2>
+        <button id="settings-close" class="icon-btn" aria-label="Close">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </header>
+      <div class="settings-body">
+        <p><strong>Storage:</strong> All data stays on this device (IndexedDB). Nothing is uploaded.</p>
+        <p id="storage-stats">…</p>
+        <button id="import-btn" class="secondary-btn">Import JSON backup</button>
+        <input id="import-file" type="file" accept="application/json,.json" hidden />
+        <button id="clear-btn" class="danger-btn">Erase all data</button>
+        <p class="version">Gastro Tracker v1.0 · offline-first PWA</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
