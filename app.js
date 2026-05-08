@@ -310,6 +310,7 @@ $$(".quick").forEach((b) =>
 const QUICK_ADD = {
   coffee: { description: "Coffee", tags: ["caffeine"] },
   milk: { description: "Milk", tags: ["dairy"] },
+  coffee_milk: { description: "Coffee with milk", tags: ["caffeine", "dairy"] },
 };
 
 async function quickLogFood(kind) {
