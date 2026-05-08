@@ -1,5 +1,7 @@
-// Gut Tracker service worker — offline-first cache.
-const CACHE = "gut-tracker-v3";
+// Gut Tracker service worker — network-first with cache fallback.
+// Network-first is important so deploys roll out on next online load instead
+// of being pinned to whatever shell was first installed.
+const CACHE = "gut-tracker-v4";
 const ASSETS = [
   "./",
   "./index.html",
@@ -14,7 +16,10 @@ const ASSETS = [
 
 self.addEventListener("install", (e) => {
   e.waitUntil(
-    caches.open(CACHE).then((c) => c.addAll(ASSETS)).then(() => self.skipWaiting()),
+    caches
+      .open(CACHE)
+      .then((c) => c.addAll(ASSETS))
+      .then(() => self.skipWaiting()),
   );
 });
 
@@ -35,18 +40,16 @@ self.addEventListener("fetch", (e) => {
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
 
+  // Network-first: try the network, fall back to cache when offline.
   e.respondWith(
-    caches.match(req).then((cached) => {
-      const fetched = fetch(req)
-        .then((res) => {
-          if (res && res.status === 200 && res.type === "basic") {
-            const clone = res.clone();
-            caches.open(CACHE).then((c) => c.put(req, clone));
-          }
-          return res;
-        })
-        .catch(() => cached);
-      return cached || fetched;
-    }),
+    fetch(req)
+      .then((res) => {
+        if (res && res.status === 200 && res.type === "basic") {
+          const clone = res.clone();
+          caches.open(CACHE).then((c) => c.put(req, clone));
+        }
+        return res;
+      })
+      .catch(() => caches.match(req)),
   );
 });
