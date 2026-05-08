@@ -136,6 +136,37 @@ main#view-root {
   line-height: 1;
 }
 
+.quick-mini-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.quick-mini {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 12px 16px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.08s ease;
+}
+
+.quick-mini:active {
+  transform: scale(0.97);
+}
+
+.quick-mini .icon {
+  font-size: 20px;
+  line-height: 1;
+}
+
 /* Entry list */
 .entry-list {
   list-style: none;
