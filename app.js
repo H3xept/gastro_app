@@ -307,6 +307,30 @@ $$(".quick").forEach((b) =>
   b.addEventListener("click", () => openEntry(b.dataset.open)),
 );
 
+const QUICK_ADD = {
+  coffee: { description: "Coffee", tags: ["caffeine"] },
+  milk: { description: "Milk", tags: ["dairy"] },
+};
+
+async function quickLogFood(kind) {
+  const preset = QUICK_ADD[kind];
+  if (!preset) return;
+  const now = new Date().toISOString();
+  await DB.put({
+    type: "food",
+    time: now,
+    data: { description: preset.description, portion: "medium", tags: preset.tags },
+    notes: null,
+    createdAt: now,
+  });
+  toast(`Logged ${preset.description}`);
+  await refreshAll();
+}
+
+$$("[data-quickadd]").forEach((b) =>
+  b.addEventListener("click", () => quickLogFood(b.dataset.quickadd)),
+);
+
 // ------------ Dialog / form rendering ------------
 
 const dialog = $("#entry-dialog");

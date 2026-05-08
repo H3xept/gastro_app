@@ -1,5 +1,5 @@
 // Gut Tracker service worker — offline-first cache.
-const CACHE = "gut-tracker-v1";
+const CACHE = "gut-tracker-v2";
 const ASSETS = [
   "./",
   "./index.html",
