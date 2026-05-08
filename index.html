@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0f766e" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Gut Tracker" />
+    <meta name="description" content="Track food, bloating, bowel movements, and sleep for your gastroenterologist." />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="icons/icon-192.png" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Gut Tracker</title>
+  </head>
+  <body>
+    <header class="appbar">
+      <h1>Gut Tracker</h1>
+      <span id="entry-count" class="entry-count" aria-live="polite"></span>
+    </header>
+
+    <main id="view-root">
+      <!-- LOG VIEW -->
+      <section class="view" data-view="log">
+        <div class="quick-grid">
+          <button class="quick" data-open="food">
+            <span class="quick-icon">🍽️</span>
+            <span class="quick-label">Food</span>
+          </button>
+          <button class="quick" data-open="bloating">
+            <span class="quick-icon">🎈</span>
+            <span class="quick-label">Bloating</span>
+          </button>
+          <button class="quick" data-open="bm">
+            <span class="quick-icon">💩</span>
+            <span class="quick-label">Bowel</span>
+          </button>
+          <button class="quick" data-open="sleep">
+            <span class="quick-icon">😴</span>
+            <span class="quick-label">Sleep</span>
+          </button>
+        </div>
+
+        <h2 class="section-title">Today</h2>
+        <ul id="today-list" class="entry-list" aria-live="polite"></ul>
+      </section>
+
+      <!-- HISTORY VIEW -->
+      <section class="view hidden" data-view="history">
+        <div class="filters">
+          <label class="filter-chip">
+            <input type="checkbox" value="food" checked />
+            <span>🍽️ Food</span>
+          </label>
+          <label class="filter-chip">
+            <input type="checkbox" value="bloating" checked />
+            <span>🎈 Bloating</span>
+          </label>
+          <label class="filter-chip">
+            <input type="checkbox" value="bm" checked />
+            <span>💩 Bowel</span>
+          </label>
+          <label class="filter-chip">
+            <input type="checkbox" value="sleep" checked />
+            <span>😴 Sleep</span>
+          </label>
+        </div>
+        <ul id="history-list" class="entry-list"></ul>
+      </section>
+
+      <!-- EXPORT VIEW -->
+      <section class="view hidden" data-view="export">
+        <h2 class="section-title">Export for your doctor</h2>
+        <p class="muted">
+          Data lives only on this device. Download a copy to share with your
+          gastroenterologist or to back up.
+        </p>
+
+        <div class="export-range">
+          <label>
+            From
+            <input type="date" id="export-from" />
+          </label>
+          <label>
+            To
+            <input type="date" id="export-to" />
+          </label>
+        </div>
+
+        <div class="export-buttons">
+          <button id="export-csv" class="btn primary">Download CSV</button>
+          <button id="export-json" class="btn">Download JSON backup</button>
+          <button id="export-summary" class="btn">Download summary (PDF-ready HTML)</button>
+        </div>
+
+        <h2 class="section-title">Summary</h2>
+        <div id="summary" class="summary"></div>
+
+        <h2 class="section-title">Danger zone</h2>
+        <button id="wipe" class="btn danger">Erase all data</button>
+      </section>
+    </main>
+
+    <nav class="tabbar" role="tablist">
+      <button class="tab active" data-view="log" role="tab">
+        <span aria-hidden="true">📝</span><span>Log</span>
+      </button>
+      <button class="tab" data-view="history" role="tab">
+        <span aria-hidden="true">📅</span><span>History</span>
+      </button>
+      <button class="tab" data-view="export" role="tab">
+        <span aria-hidden="true">📤</span><span>Export</span>
+      </button>
+    </nav>
+
+    <!-- ENTRY DIALOG -->
+    <dialog id="entry-dialog" class="entry-dialog">
+      <form id="entry-form" method="dialog">
+        <header class="dialog-head">
+          <h2 id="dialog-title">Entry</h2>
+          <button type="button" class="close" data-close aria-label="Close">✕</button>
+        </header>
+
+        <div class="field">
+          <label for="entry-time">When</label>
+          <input type="datetime-local" id="entry-time" required />
+        </div>
+
+        <div id="dynamic-fields"></div>
+
+        <div class="field">
+          <label for="entry-notes">Notes</label>
+          <textarea id="entry-notes" rows="2" placeholder="Optional"></textarea>
+        </div>
+
+        <footer class="dialog-foot">
+          <button type="button" class="btn ghost" id="delete-entry" hidden>Delete</button>
+          <button type="button" class="btn" data-close>Cancel</button>
+          <button type="submit" class="btn primary">Save</button>
+        </footer>
+      </form>
+    </dialog>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script src="db.js"></script>
+    <script src="app.js"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('sw.js').catch(() => {});
+        });
+      }
+    </script>
+  </body>
+</html>
