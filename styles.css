@@ -137,25 +137,28 @@ main#view-root {
 }
 
 .quick-mini-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .quick-mini {
+  flex: 1 1 calc(33% - 6px);
+  min-width: 110px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
   background: var(--surface-2);
   border: 1px solid var(--border);
   color: var(--text);
   border-radius: 999px;
-  padding: 12px 16px;
-  font-size: 15px;
+  padding: 12px 14px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.08s ease;
+  white-space: nowrap;
 }
 
 .quick-mini:active {
