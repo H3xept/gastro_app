@@ -54,7 +54,8 @@ html {
 }
 
 body {
-  height: 100%;
+  position: fixed;
+  inset: 0;
   display: flex;
   flex-direction: column;
   padding-top: var(--safe-top);
@@ -80,14 +81,18 @@ body {
 }
 
 main#view-root {
-  flex: 1;
+  flex: 1 1 0;
   min-height: 0;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  padding: 4px 16px calc(var(--tabbar-h) + var(--safe-bottom) + 32px);
+  padding: 4px 16px 24px;
   max-width: 720px;
   margin: 0 auto;
   width: 100%;
+}
+
+.appbar {
+  flex-shrink: 0;
 }
 
 .view.hidden {
@@ -369,17 +374,12 @@ main#view-root {
   color: var(--danger);
 }
 
-/* Tabbar */
+/* Tabbar — last flex child of body, anchored to the bottom edge */
 .tabbar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  flex-shrink: 0;
   height: calc(var(--tabbar-h) + var(--safe-bottom));
   padding-bottom: var(--safe-bottom);
-  background: color-mix(in oklab, var(--surface) 92%, transparent);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: var(--surface);
   border-top: 1px solid var(--border);
   display: flex;
   z-index: 10;
@@ -591,7 +591,7 @@ main#view-root {
 /* Toast */
 .toast {
   position: fixed;
-  bottom: calc(var(--tabbar-h) + var(--safe-bottom) + 16px);
+  bottom: calc(var(--tabbar-h) + var(--safe-bottom) + 12px);
   left: 50%;
   transform: translateX(-50%) translateY(20px);
   background: var(--text);
