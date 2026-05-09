@@ -1,7 +1,7 @@
 // Gut Tracker service worker — network-first with cache fallback.
 // Network-first is important so deploys roll out on next online load instead
 // of being pinned to whatever shell was first installed.
-const CACHE = "gut-tracker-v4";
+const CACHE = "gut-tracker-v5";
 const ASSETS = [
   "./",
   "./index.html",

@@ -49,12 +49,16 @@ body {
   overscroll-behavior-y: none;
 }
 
+html {
+  height: 100%;
+}
+
 body {
-  min-height: 100vh;
-  min-height: 100dvh;
+  height: 100%;
   display: flex;
   flex-direction: column;
   padding-top: var(--safe-top);
+  overflow: hidden;
 }
 
 .appbar {
@@ -77,7 +81,10 @@ body {
 
 main#view-root {
   flex: 1;
-  padding: 0 16px calc(var(--tabbar-h) + var(--safe-bottom) + 24px);
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 4px 16px calc(var(--tabbar-h) + var(--safe-bottom) + 32px);
   max-width: 720px;
   margin: 0 auto;
   width: 100%;
@@ -137,18 +144,17 @@ main#view-root {
 }
 
 .quick-mini-row {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 8px;
 }
 
 .quick-mini {
-  flex: 1 1 calc(33% - 6px);
-  min-width: 110px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
+  min-width: 0;
   background: var(--surface-2);
   border: 1px solid var(--border);
   color: var(--text);
@@ -159,6 +165,12 @@ main#view-root {
   cursor: pointer;
   transition: transform 0.08s ease;
   white-space: nowrap;
+  overflow: hidden;
+}
+
+.quick-mini > span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .quick-mini:active {
